@@ -12,15 +12,26 @@ doSomething = function (){
     Graphics = PIXI.Graphics;
 	
 	requestAnimationFrame( animate );
+    
+    var lowestUnfilledRow = 5;
 	
 	
 	function animate() {
-	
-	    requestAnimationFrame( animate );
-	
-	    // render the stage   
-	    renderer.render(stage);
+	  requestAnimationFrame( animate );
+	  // render the stage   
+	 renderer.render(stage);
 	}
+    
+    // keep another matrix internally to keep track of which cell is set,
+    // and by whome and who is the winner etc,. we need a 2 dimention matrix to impliment the logic.
+    var board = [
+    [0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0]
+];
     
 // create a board with tiles and set click event for each of them.
 for (var i = 6; i >= 0; i--) {
@@ -36,10 +47,49 @@ for (var i = 6; i >= 0; i--) {
         stage.addChild(tile);
     }
 }
-    function onTilesClick()
-    {
+    
+//#15- finding the bottom most available row and fill a disc.
+function onTilesClick()
+    {    
+        // the val is saved as "rownum - colnum" so split on "-" and get the 1st element , that will be the column.
+        var clickedColoumn = Number(this.val.split("-")[1]);
+        var rowLength = board.length;
+        var rowObj = findEmptyRow(clickedColoumn, rowLength - 1);
+        //execute if empty slot present in that coloumn
+        if (rowObj.available) {
+            var insertionSlot = rowObj.slot + "-" + clickedColoumn;
+            // colour the cell with above row and col value.
+            for (var i = 0; i < stage.children.length; i++) {
+                if (stage.children[i].val !== undefined && stage.children[i].val === insertionSlot) {
+                    stage.children[i].tint = 0xfff000;
+                    
+                    // finally update the board matrix for our internal calculation
+                    if (rowObj.slot < lowestUnfilledRow) {
+                        lowestUnfilledRow = rowObj.slot;
+                        }
+                    // add some non 0 value to know it's filled
+                    board[rowObj.slot][clickedColoumn] = 1;
+                }
+            }
+        }
+        renderer.render(stage);    
     }
     
-    
-
+//#15- finding the bottom most available row and fill a disc.
+// search for a empty slot on the board by recurssion.
+function findEmptyRow(a, index) {
+    if (index === -1) {
+        return {
+            available: false,
+            slot: -1
+        }; // No empty slot in the col
+    }
+    if (board[index][a] === 0) {
+        return {
+            available: true,
+            slot: index
+        };
+    }
+    return findEmptyRow(a, index - 1);
+}
 };
