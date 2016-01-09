@@ -101,6 +101,7 @@ function findEmptyRow(a, index) {
     
 // #11, #12 - alternate the player turns
 function changePlayer(){
+    checkHorizontalConnect();
     if(currentplayer == "human"){
         currentplayer = "AI";
     }
@@ -108,6 +109,32 @@ function changePlayer(){
         currentplayer = "human";
     }
 }
+    
+//#17 - check for horizontal connection winner.    
+function checkHorizontalConnect(){
+    for (var i = board.length - 1; i >= lowestUnfilledRow; i--) {
+        for (var j = 0; j < board[i].length; j++) {
+            //check if the middle col has opposite players number
+            var midCol = board[0].length - 4;
+            var middleElement = board[i][midCol];
+            if (middleElement !== currentplayer || middleElement === 0) {
+                //No chance of horizontal match with this condition
+                break;
+            }
+            //Horizontal Checker
+            if (currentplayer === board[i][j] &&
+                board[i][j] === board[i][j + 1] &&
+                board[i][j] === board[i][j + 2] &&
+                board[i][j] === board[i][j + 3] &&
+                board[i][j + 3] !== undefined) {
+                console.log("winner " + currentplayer);
+                return true;
+            }
+        }
+    }
+}
+    
+
         
         
     
