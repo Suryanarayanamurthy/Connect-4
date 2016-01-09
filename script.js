@@ -17,6 +17,7 @@ doSomething = function (){
     
     var currentplayer = "human";
 	
+    
 	
 	function animate() {
 	  requestAnimationFrame( animate );
@@ -102,6 +103,7 @@ function findEmptyRow(a, index) {
 // #11, #12 - alternate the player turns
 function changePlayer(){
     checkHorizontalConnect();
+    checkVerticalConnection();
     if(currentplayer == "human"){
         currentplayer = "AI";
     }
@@ -127,14 +129,31 @@ function checkHorizontalConnect(){
                 board[i][j] === board[i][j + 2] &&
                 board[i][j] === board[i][j + 3] &&
                 board[i][j + 3] !== undefined) {
-                console.log("winner " + currentplayer);
+                console.log("horizontal connection winner " + currentplayer);
                 return true;
             }
         }
     }
 }
     
-
+function checkVerticalConnection(){
+     for (var i = board.length - 1; i >= lowestUnfilledRow; i--) {
+            for (var j = 0; j < board[i].length; j++) {
+                if (i - 3 < 0) {
+                    break;
+                }
+                if (currentplayer === board[i][j] &&
+                    board[i][j] === board[i - 1][j] &&
+                    board[i - 1][j] === board[i - 2][j] &&
+                    board[i - 2][j] === board[i - 3][j] &&
+                    board[i - 3] !== undefined) {
+                    console.log("virtical connection winner "+currentplayer);
+                    return true;
+                    
+                }
+            }
+        }
+}
         
         
     
