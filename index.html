@@ -6,7 +6,7 @@
 		body {
 			margin: 0;
 			padding: 0;
-			background-color: #000000;
+/*			background-color: #000000;*/
 		}
 	</style>
 	<script src="pixi.js-3.0.9/bin/pixi.js"></script>
@@ -14,8 +14,12 @@
     <script src="script.js"></script>
 
 </head>
-<body onload="doSomething();">
-	
-
-	</body>
+<body onload="init()">
+	<div >
+        <h1 id="msgBoard"></h1>
+    </div>
+    <div id="gameContainer">
+    </div>
+    <button onclick="resetgame()">Reset Game</button>
+    </body>
 </html>

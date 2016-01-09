@@ -1,54 +1,73 @@
-doSomething = function (){
+
+
+
+var stage;
+
+
+var renderer;
+ 
+var Graphics;
+
+requestAnimationFrame( animate );
+
+var lowestUnfilledRow;
+
+var currentplayer;
+
+var messageBoard = "blah blah";
+
+var board;
+var tile;
+
 	
-	// create an new instance of a pixi stage
-	var stage = new PIXI.Stage(0x66FF99);
-	
-	// create a renderer instance
-	var renderer = PIXI.autoDetectRenderer(640, 500);
-	
-	// add the renderer view element to the DOM
-	document.body.appendChild(renderer.view);
-    
-    Graphics = PIXI.Graphics;
-	
-	requestAnimationFrame( animate );
-    
-    var lowestUnfilledRow = 5;
-    
-    var currentplayer = "human";
-	
-    
-	
-	function animate() {
+function animate() {
 	  requestAnimationFrame( animate );
 	  // render the stage   
+            
 	 renderer.render(stage);
+    
 	}
     
+    
+function init(){
+    Graphics = PIXI.Graphics;
+    // create an new instance of a pixi stage
+    stage = new PIXI.Stage(0x66FF99);
+    // create a renderer instance    
+    renderer = PIXI.autoDetectRenderer(640, 500);
+
+    // add the renderer view element to the DOM
+    document.getElementById("gameContainer").appendChild(renderer.view);
+    
+    lowestUnfilledRow = 5;
+    currentplayer = "human";
+
     // keep another matrix internally to keep track of which cell is set,
     // and by whome and who is the winner etc,. we need a 2 dimention matrix to impliment the logic.
-    var board = [
+    board = [
     [0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0]
-];
-    
-//#8, #9 -  create a board with tiles and set click event for each of them.
-for (var i = 6; i >= 0; i--) {
+    ];
+
+    //#8, #9 -  create a board with tiles and set click event for each of them.
+    for (var i = 6; i >= 0; i--) {
     for (var j = 5; j >= 0; j--) {
-        var tile = new Graphics();
-        tile.beginFill(0xffffff);
-        tile.drawRect(110 + 60 * i, 80 + 55 * j, 50, 50);
-        tile.endFill();
-        tile.buttonMode = true;
-        tile.interactive = true;
-        tile.val = j + "-" + i;
-        tile.on('mousedown', onTilesClick);
-        stage.addChild(tile);
+    tile = new Graphics();
+    tile.beginFill(0xffffff);
+    tile.drawRect(110 + 60 * i, 80 + 55 * j, 50, 50);
+    tile.endFill();
+    tile.buttonMode = true;
+    tile.interactive = true;
+    tile.val = j + "-" + i;
+    tile.on('mousedown', onTilesClick);
+    stage.addChild(tile);
     }
+    }
+
 }
     
 //#15, #10, #9- finding the bottom most available row and fill a disc.
@@ -113,7 +132,7 @@ function changePlayer(){
     }
 }
     
-//#17 - check for horizontal connection winner.    
+//#17 - check for horizontal connection winner.
 function checkHorizontalConnect(){
     for (var i = board.length - 1; i >= lowestUnfilledRow; i--) {
         for (var j = 0; j < board[i].length; j++) {
@@ -131,6 +150,7 @@ function checkHorizontalConnect(){
                 board[i][j] === board[i][j + 3] &&
                 board[i][j + 3] !== undefined) {
                 console.log("horizontal connection winner " + currentplayer);
+                displayMessage("horizontal connection winner " + currentplayer);
                 return true;
             }
         }
@@ -185,6 +205,16 @@ function checkDiagnolConnection(){
         }
     }
 }
-        
+
+//#20 - message board to display messages on the game's message board.
+function displayMessage(msg){
+    document.getElementById("msgBoard").innerHTML = msg;
+}
+
+//#13 - reset button to reset the game.
+function resetgame(){
+    document.getElementById("gameContainer").removeChild(renderer.view);
+    displayMessage("");
+    init();
+}
     
-};
