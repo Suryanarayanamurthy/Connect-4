@@ -104,6 +104,7 @@ function findEmptyRow(a, index) {
 function changePlayer(){
     checkHorizontalConnect();
     checkVerticalConnection();
+    checkDiagnolConnection();
     if(currentplayer == "human"){
         currentplayer = "AI";
     }
@@ -135,7 +136,7 @@ function checkHorizontalConnect(){
         }
     }
 }
-    
+//#18 -  check for vertical connection winner.
 function checkVerticalConnection(){
      for (var i = board.length - 1; i >= lowestUnfilledRow; i--) {
             for (var j = 0; j < board[i].length; j++) {
@@ -154,7 +155,36 @@ function checkVerticalConnection(){
             }
         }
 }
-        
+//#19 - check for diagonal connection winner.
+function checkDiagnolConnection(){
+    //diagonally towards left
+    for (var i = board.length - 1; i >= 3; i--) {
+        for (var j = board[i].length - 1; j >= 0; j--) {
+            if (board[i - 3] !== undefined &&
+            currentplayer === board[i][j] &&
+            board[i][j] === board[i - 1][j - 1] &&
+            board[i - 1][j - 1] === board[i - 2][j - 2] &&
+            board[i - 2][j - 2] === board[i - 3][j - 3]) {
+                console.log("left diagnol connect winner "+currentplayer);
+                return true;
+            }
+        }
+    }
+
+    //diagonally towards right
+    for (var i = board.length - 1; i >= 3; i--) {
+        for (var j = 0; j < board[i].length; j++) {
+            if (board[i - 3] !== undefined &&
+            currentplayer === board[i][j] &&
+            board[i][j] === board[i - 1][j + 1] &&
+            board[i - 1][j + 1] === board[i - 2][j + 2] &&
+            board[i - 2][j + 2] === board[i - 3][j + 3]) {
+                console.log("right diagnol connect winner "+currentplayer);
+                return true;
+            }
+        }
+    }
+}
         
     
 };
