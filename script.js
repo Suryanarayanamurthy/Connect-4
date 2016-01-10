@@ -1,24 +1,13 @@
-
-
-
 var stage;
-
-
 var renderer;
- 
 var Graphics;
-
 requestAnimationFrame( animate );
-
 var lowestUnfilledRow;
-
 var currentplayer;
-
-var messageBoard = "blah blah";
-
 var board;
 var tile;
-
+var isCurrentPlayerWon;
+var isGameOver;
 	
 function animate() {
 	  requestAnimationFrame( animate );
@@ -41,6 +30,10 @@ function init(){
     
     lowestUnfilledRow = 5;
     currentplayer = "human";
+    
+    displayMessage("");
+    isCurrentPlayerWon = false;
+    isGameOver = false;
 
     // keep another matrix internally to keep track of which cell is set,
     // and by whome and who is the winner etc,. we need a 2 dimention matrix to impliment the logic.
@@ -121,9 +114,6 @@ function findEmptyRow(a, index) {
     
 // #11, #12 - alternate the player turns
 function changePlayer(){
-    checkHorizontalConnect();
-    checkVerticalConnection();
-    checkDiagnolConnection();
     if(currentplayer == "human"){
         currentplayer = "AI";
     }
@@ -150,9 +140,10 @@ function checkHorizontalConnect(){
                 board[i][j] === board[i][j + 3] &&
                 board[i][j + 3] !== undefined) {
                 console.log("horizontal connection winner " + currentplayer);
-                displayMessage("horizontal connection winner " + currentplayer);
+                //displayMessage("horizontal connection winner " + currentplayer);
                 return true;
             }
+            else return false;
         }
     }
 }
@@ -170,8 +161,8 @@ function checkVerticalConnection(){
                     board[i - 3] !== undefined) {
                     console.log("virtical connection winner "+currentplayer);
                     return true;
-                    
                 }
+                else return false;
             }
         }
 }
@@ -188,6 +179,7 @@ function checkDiagnolConnection(){
                 console.log("left diagnol connect winner "+currentplayer);
                 return true;
             }
+            else return false;
         }
     }
 
@@ -202,6 +194,7 @@ function checkDiagnolConnection(){
                 console.log("right diagnol connect winner "+currentplayer);
                 return true;
             }
+            else return false;
         }
     }
 }
@@ -214,7 +207,26 @@ function displayMessage(msg){
 //#13 - reset button to reset the game.
 function resetgame(){
     document.getElementById("gameContainer").removeChild(renderer.view);
-    displayMessage("");
     init();
 }
-    
+
+//#21 - check for the winner b4 changing the player
+function checkCurrentGameStatus(){
+    if( checkHorizontalConnect() ||
+    checkVerticalConnection() ||
+    checkDiagnolConnection()){
+        isGameOver = true;
+        displayMessage("Game Over , " + currentplayer+ " is the winner, click 'reset' to play again." );
+    }
+    else if (checkIfTie()){
+        
+    }
+}
+
+//#25 - check if game is draw.
+function checkIfTie(){
+    console.log();
+    var rowObj = findEmptyRow(clickedColoumn, rowLength - 1);
+ if (lowestUnfilledRow <= board.length - 4) {   
+}
+}
