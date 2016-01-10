@@ -64,33 +64,35 @@ function init(){
 }
     
 //#15, #10, #9- finding the bottom most available row and fill a disc.
-function onTilesClick(){    
-        // the val is saved as "rownum - colnum" so split on "-" and get the 1st element , that will be the column.
-        var clickedColoumn = Number(this.val.split("-")[1]);
-        var rowLength = board.length;
-        var rowObj = findEmptyRow(clickedColoumn, rowLength - 1);
-        //execute if empty slot present in that coloumn
-        if (rowObj.available) {
-            var insertionSlot = rowObj.slot + "-" + clickedColoumn;
-            // colour the cell with above row and col value.
-            for (var i = 0; i < stage.children.length; i++) {
-                if (stage.children[i].val !== undefined && stage.children[i].val === insertionSlot) {
-                    if(currentplayer == "human")
-                    stage.children[i].tint = 0xfff000;
-                    else stage.children[i].tint = 0x000fff;
-                    
-                    // finally update the board matrix for our internal calculation
-                    if (rowObj.slot < lowestUnfilledRow) {
-                        lowestUnfilledRow = rowObj.slot;
-                        }
-                    // add some non 0 value to know it's filled
-                    board[rowObj.slot][clickedColoumn] = currentplayer;
-                    //change the player turn.
-                    changePlayer();
+function onTilesClick(){
+    if(!isGameOver){
+            // the val is saved as "rownum - colnum" so split on "-" and get the 1st element , that will be the column.
+            var clickedColoumn = Number(this.val.split("-")[1]);
+            var rowLength = board.length;
+            var rowObj = findEmptyRow(clickedColoumn, rowLength - 1);
+            //execute if empty slot present in that coloumn
+            if (rowObj.available) {
+                var insertionSlot = rowObj.slot + "-" + clickedColoumn;
+                // colour the cell with above row and col value.
+                for (var i = 0; i < stage.children.length; i++) {
+                    if (stage.children[i].val !== undefined && stage.children[i].val === insertionSlot) {
+                        if(currentplayer == "human")
+                        stage.children[i].tint = 0xfff000;
+                        else stage.children[i].tint = 0x000fff;
+
+                        // finally update the board matrix for our internal calculation
+                        if (rowObj.slot < lowestUnfilledRow) {
+                            lowestUnfilledRow = rowObj.slot;
+                            }
+                        // add some non 0 value to know it's filled
+                        board[rowObj.slot][clickedColoumn] = currentplayer;
+                        //change the player turn.
+                        changePlayer();
+                    }
                 }
             }
+            renderer.render(stage);    
         }
-        renderer.render(stage);    
     }
     
 //#15, #10- finding the bottom most available row and fill a disc.
@@ -114,11 +116,14 @@ function findEmptyRow(a, index) {
     
 // #11, #12 - alternate the player turns
 function changePlayer(){
+    checkCurrentGameStatus();
+    if(!isGameOver){
     if(currentplayer == "human"){
         currentplayer = "AI";
     }
     else{
         currentplayer = "human";
+    }
     }
 }
     
@@ -219,14 +224,24 @@ function checkCurrentGameStatus(){
         displayMessage("Game Over , " + currentplayer+ " is the winner, click 'reset' to play again." );
     }
     else if (checkIfTie()){
-        
+        isGameOver = true;
+        displayMessage("Game Over , Game is Tie... click 'reset' to play again." );
     }
 }
 
 //#25 - check if game is draw.
 function checkIfTie(){
     console.log();
-    var rowObj = findEmptyRow(clickedColoumn, rowLength - 1);
- if (lowestUnfilledRow <= board.length - 4) {   
-}
+    // if the last available row for all the columns is not available, and the game is not wone by any1 then it's a draw
+    if(!findEmptyRow(0, board.length - 1).available &&
+       !findEmptyRow(1, board.length - 1).available &&
+       !findEmptyRow(2, board.length - 1).available &&
+       !findEmptyRow(3, board.length - 1).available &&
+       !findEmptyRow(4, board.length - 1).available &&
+      !findEmptyRow(5, board.length - 1).available &&
+      !findEmptyRow(6, board.length - 1).available )
+    {
+        return true;
+    }
+    else false;
 }
