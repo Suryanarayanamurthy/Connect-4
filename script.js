@@ -213,8 +213,8 @@ function resetgame(){
 //#21 - check for the winner b4 changing the player
 function checkCurrentGameStatus(){
     if( checkHorizontalConnect(currentplayer) ||
-    checkVerticalConnection(changePlayer) ||
-    checkDiagnolConnection(changePlayer)){
+    checkVerticalConnection(currentplayer) ||
+    checkDiagnolConnection(currentplayer)){
         isGameOver = true;
         displayMessage("Game Over , " + currentplayer+ " is the winner, click 'reset' to play again." );
     }
