@@ -1,2 +1,4 @@
 # Connect-4
-Using Pixijs with ES6 dialect
+
+Using Pixijs
+download the repo, unzip the source and run index file...
