@@ -13,7 +13,6 @@ var humanDisk = 0xfff000;
 var AIsDisk = 0x000fff;
 var isFirstMove;
 var clickedColoumn;
-
 	
 function animate() {
 	  requestAnimationFrame( animate );
@@ -22,7 +21,6 @@ function animate() {
 	 renderer.render(stage);
     
 	}
-    
     
 function init(){
     Graphics = PIXI.Graphics;
@@ -104,7 +102,6 @@ function findEmptyRow(a, index) {
     return findEmptyRow(a, index - 1);
 }
     
-    
 // #11, #12 - alternate the player turns, if it's AI's turn get the nextsmartmove and do it.
 function changePlayer(){
     checkCurrentGameStatus();
@@ -146,6 +143,7 @@ function checkHorizontalConnect(checkForPlayer){
     }
     return retVal;
 }
+
 //#18 -  check for vertical connection winner.
 function checkVerticalConnection(checkForPlayer){
     var retVal = false;
@@ -166,6 +164,7 @@ function checkVerticalConnection(checkForPlayer){
         }
     return retVal;
 }
+
 //#19 - check for diagonal connection winner.
 function checkDiagnolConnection(checkForPlayer){
     var retVal = false;
@@ -241,10 +240,10 @@ function checkIfTie(){
     else false;
 }
 
-//#26, #22, #23, #24 - AI logic to finally decide on the move and do it.
+//#26, #27, #28, #29, #22, #23, #24 - AI logic to finally decide on the move and do it.
 function GetNextSmartMove(){
     var nextSmartMove;
-    //generally it's a smart move to place the disk in the center.
+    //# 28, generally it's a smart move to place the disk in the center.
     if(isFirstMove)
     {
         //not 1st time anymore ;-)
@@ -258,7 +257,7 @@ function GetNextSmartMove(){
         }
     }
     
-    //#22, #23, #24 - check if next move is AI's win move then do it.
+    //#26, #22, #23, #24 - check if next move is AI's win move then do it.
     nextSmartMove = findNextMove(currentplayer);
     if(nextSmartMove != undefined)
     return nextSmartMove;
@@ -268,14 +267,14 @@ function GetNextSmartMove(){
     if(nextSmartMove != undefined)
     return nextSmartMove;
     
-    // else try putting a disk on the same column where the human has clicked.
+    //#28 - else try putting a disk on the same column where the human has clicked.
     var rowObj = findEmptyRow(clickedColoumn, board.length - 1);
     //execute if empty slot present in that coloumn
     if (rowObj.available) {
     nextSmartMove = rowObj.slot + "-" + clickedColoumn;
     return nextSmartMove;
     }
-    // else try putting the disk on the next available column.
+    //#29 -  else try putting the disk on the next available column.
     clickedColoumn =0;
     while(clickedColoumn < 7)
     {
@@ -288,6 +287,8 @@ function GetNextSmartMove(){
         }
     }
 }
+
+// drop disk at the available slot.
 function dropDiskAt(slot){
     var insertionSlot = slot;
     // colour the cell with above row and col value.
@@ -310,22 +311,7 @@ function dropDiskAt(slot){
     }
 }
 
-
-//function setComputerMoves() {
-//    
-//    
-//    var nextMove = findNextMove();
-//    for (var i = 0; i < stage.children.length; i++) {
-//        if (stage.children[i].val !== undefined && stage.children[i].val === nextMove.slot[0] + "-" + nextMove.slot[1]) {
-//            stage.children[i].tint = colorComb[gameSettings.active];
-//            stage.removeChild(message);
-//        }
-//    }
-//    updateGameBoard(nextMove.slot[0], nextMove.slot[1]);
-//}
-
-
-//#22, #23, #24 - check if next move is success move the given user.
+//#26, #27, #28,  #22, #23, #24 - check if next move is success move the given user.
 function findNextMove(checkForPlayer) {
     var col = 0;
     while (col < 7) {
@@ -347,145 +333,3 @@ function findNextMove(checkForPlayer) {
         col++;
     }
 }
-
-//
-///*
-//	Check for our three consecutive occurrence/then opponents
-//	then Check for our two consecutive occurrence/then opponents
-//	then Check for our one consecutive occurrence/then opponents	
-//	
-//	Priority is for players winning move, or else block opponents winning move
-//*/
-//function selectBestMove(checkNum) {
-//    //exit condition for recursive function 
-//    if (directionFunctions.filter(dirIterationCheck).length === 0 && checkNum === 0) {
-//        return {
-//            status: false
-//        } //game Over
-//    } else if (directionFunctions.filter(dirIterationCheck).length === 0) {
-//        //reset direction object to start next iteration
-//        checkNum--;
-//        directionFunctions.map(function(a) {
-//            a.visited = false;
-//        });
-//    }
-//    //console.log(directionFunctions)
-//    //alert(checkNum);
-//    var dirObj = direction();
-//    var availability = dirObj.dirFn(checkNum, dirObj.player);
-//    if (availability === undefined) {
-//        return selectBestMove(checkNum);
-//    } else {
-//        directionFunctions.map(function(a) {
-//            a.visited = false;
-//        });
-//        return {
-//            status: true,
-//            slot: availability
-//        };
-//    }
-//}
-//
-//
-////provides which direction to check next for a successful move
-//function direction() {
-//    var nextDir = directionFunctions.filter(getNextDirection);
-//
-//    function getNextDirection(val) {
-//        return val.visited === false;
-//    }
-//    nextDir = nextDir.slice(0, 1);
-//    nextDir[0].visited = true;
-//    return nextDir[0];
-//}
-//
-////to check if any dirObj ele left unvisited 
-//function dirIterationCheck(a) {
-//    return a.visited === false;
-//}
-//
-////Check for horizontal success move
-//function horizontalCheck(checkNum, currentPlayer) {
-//    for (var i = board.length - 1; i >= gameSettings.lowestUnfilledRow; i--) {
-//        for (var j = 0; j < board[i].length; j++) {
-//            var loc = j + checkNum - 1;
-//            if (board[i][loc] !== undefined) {
-//                var slicedArray = board[i].slice(j, j + checkNum);
-//                //console.log("horiz");
-//                //console.log(currentPlayer);
-//                //console.log(slicedArray)
-//                //consecutive occurrence check
-//                var isConsecutive = checkConsecutive(slicedArray, checkNum, gameSettings[currentPlayer]);
-//                //console.log(isConsecutive)
-//                if (isConsecutive) {
-//                    //console.log(board[i][j-1])
-//                    //console.log(board[i][loc])
-//                    //console.log(board[i][loc+1]);
-//                    //check if slot next to it are available for insertion
-//                    if (board[i][j - 1] !== undefined && board[i][j - 1] === 0) {
-//                        if (findEmptyRow(parseInt(j - 1), board.length - 1).slot === parseInt(i)) {
-//                            return [parseInt(i), parseInt(j - 1)];
-//                        }
-//
-//                    } else if (board[i][loc + 1] !== undefined && board[i][loc + 1] === 0) {
-//                        if (findEmptyRow(parseInt(loc + 1), board.length - 1).slot === parseInt(i)) {
-//                            return [parseInt(i), parseInt(loc + 1)];
-//                        }
-//
-//                    } else {
-//                        break;
-//                    }
-//
-//                }
-//            } else {
-//                break;
-//            }
-//        }
-//    }
-//    return undefined;
-//}
-//
-////Check for vertical success move
-//function verticalCheck(checkNum, currentPlayer) {
-//    for (var i = board.length - 1; i >= 0; i--) {
-//        var loc = i - checkNum;
-//        if (board[loc] != undefined) {
-//            for (var j = 0; j < board[i].length; j++) {
-//                var slicedArray = [];
-//                if (board[loc][j] !== undefined) { //array out of bound check
-//                    var count = 0;
-//                    while (count < checkNum) {
-//                        slicedArray.push(board[i - count][j]);
-//                        count++;
-//                    }
-//                    var isConsecutive = checkConsecutive(slicedArray, checkNum, gameSettings[currentPlayer]);
-//                    if (isConsecutive && board[loc][j] === 0) {
-//                        console.log("ver cond")
-//                        return [loc, j];
-//                    }
-//                } else {
-//                    break;
-//                }
-//            }
-//        } else {
-//            break;
-//        }
-//    }
-//    return undefined;
-//}
-//
-////gives the consecutive occurence of a color
-//function checkConsecutive(a, limit, val) {
-//    if (a.length < limit || a.indexOf(0) !== -1) {
-//        return false;
-//    } else {
-//        for (var i = 1; i < a.length; i++) {
-//            if (a[i - 1] !== a[i]) {
-//                return false;
-//            } else if (a[i] !== val) {
-//                return false;
-//            }
-//        }
-//    }
-//    return true;
-//}
