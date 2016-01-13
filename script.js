@@ -1,7 +1,6 @@
 var stage;
 var renderer;
 var Graphics;
-requestAnimationFrame( animate );
 var lowestUnfilledRow;
 var currentplayer;
 var board;
@@ -13,6 +12,7 @@ var humanDisk = 0xfff000;
 var AIsDisk = 0x000fff;
 var isFirstMove;
 var clickedColoumn;
+requestAnimationFrame( animate );
 	
 function animate() {
 	  requestAnimationFrame( animate );
