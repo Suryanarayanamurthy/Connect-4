@@ -1,6 +1,7 @@
 /**
  * Created by Suryanarayanamurthy on 17-Jan-16.
  */
+"use strict";
 let stage;
 let renderer;
 let Graphics;
@@ -16,12 +17,12 @@ const AIsDisk = 4095;
 let isFirstMove;
 let clickedColoumn;
 requestAnimationFrame(animate);
+
 function animate() {
     requestAnimationFrame(animate);
     // render the stage
     renderer.render(stage);
 }
-;
 function init() {
     Graphics = PIXI.Graphics;
     // create an new instance of a pixi stage
@@ -102,7 +103,7 @@ function init() {
             tile.beginFill(16777215);
             tile.drawRect(110 + 60 * i, 80 + 55 * j, 50, 50);
             tile.endFill();
-            tile.on('mousedown', onTilesClick);
+            
             tile.buttonMode = true;
             tile.interactive = true;
             tile.val = j + "-" + i;
@@ -112,7 +113,6 @@ function init() {
         }
     }
 }
-;
 //#15, #10, #9- finding the bottom most available row and fill a disc.
 function onTilesClick() {
     if (!isGameOver) {
@@ -282,14 +282,13 @@ function GetNextSmartMove() {
     while (clickedColoumn < 7) {
         // dangerous piece of code, channces of infinate loop.
         //if(clickedColoumn == 6) clickedColoumn =0;
-        rowObj = findEmptyRow(clickedColoumn++, board.length - 1);
+        rowObj = findemptyrow(clickedColoumn++, board.length - 1);
         if (rowObj.available) {
             nextSmartMove = `${ rowObj.slot }-${ clickedColoumn }`;
             return nextSmartMove;
         }
     }
 }
-;
 // drop disk at the available slot.
 function dropDiskAt(slot){
     var insertionSlot = slot;

@@ -2,7 +2,7 @@
   "name": "connect-4",
   "version": "1.0.0",
   "description": "Using Pixijs\r download the repo, unzip the source and run index file...",
-  "main": "script.js",
+  "main": "scriptes6.js",
   "dependencies": {},
   "devDependencies": {
     "babel-cli": "^6.4.0",
