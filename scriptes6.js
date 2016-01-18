@@ -103,7 +103,7 @@ function init() {
             tile.beginFill(16777215);
             tile.drawRect(110 + 60 * i, 80 + 55 * j, 50, 50);
             tile.endFill();
-            
+
             tile.buttonMode = true;
             tile.interactive = true;
             tile.val = j + "-" + i;
@@ -290,12 +290,12 @@ function GetNextSmartMove() {
     }
 }
 // drop disk at the available slot.
-function dropDiskAt(slot){
+function dropDiskAt(slot) {
     var insertionSlot = slot;
     // colour the cell with above row and col value.
     for (var i = 0; i < stage.children.length; i++) {
         if (stage.children[i].val !== undefined && stage.children[i].val === insertionSlot) {
-            if(currentplayer == "human")
+            if (currentplayer == "human")
                 stage.children[i].tint = humanDisk;
             else stage.children[i].tint = AIsDisk;
             // update the lowest unfilled row with the new value
